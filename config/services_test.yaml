@@ -7,3 +7,8 @@ services:
         arguments:
             $baseUrl: 'https://api.nbp.pl/api/'
             $httpClient: '@http_client'
+
+    App\Service\Nbp\ExchangeRatesService:
+        public: true
+        arguments:
+            $nbpClient: '@App\Service\Nbp\ApiClient'

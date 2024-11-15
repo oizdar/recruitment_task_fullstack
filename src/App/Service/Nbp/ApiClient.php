@@ -20,7 +20,7 @@ class ApiClient
     }
 
 
-    public function getExchangeRates(): array
+    public function getExchangeRates(): array //todo otpional filters? +/-
     {
         $response = $this->httpClient->request(
             'GET',
@@ -28,7 +28,7 @@ class ApiClient
         );
 
         if($response->getStatusCode() !== 200) {
-            throw new CommunicationException('Failed to communicate with NBP API'); //we can catch more specific exceptions here
+            throw new CommunicationException('Failed to communicate with NBP API'); //todo:  catch more specific exceptions here, add logger to client
         }
 
         return $response->toArray();
