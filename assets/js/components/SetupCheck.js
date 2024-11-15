@@ -2,16 +2,9 @@
 
 import React, {Component} from 'react';
 import axios from 'axios';
+import AbstractPageComponent from "./AbstractPageComponent.js";
 
-class SetupCheck extends Component {
-    constructor() {
-        super();
-        this.state = { setupCheck: {}, loading: true};
-    }
-
-    getBaseUrl() {
-        return 'http://telemedi-zadanie.localhost';
-    }
+class SetupCheck extends AbstractPageComponent {
 
     componentDidMount() {
         this.checkApiSetup();
