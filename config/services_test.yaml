@@ -1,0 +1,9 @@
+
+parameters:
+
+services:
+    App\Service\Nbp\ApiClient:
+        public: true
+        arguments:
+            $baseUrl: 'https://api.nbp.pl/api/'
+            $httpClient: '@http_client'
