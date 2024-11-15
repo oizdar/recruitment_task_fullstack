@@ -53,11 +53,16 @@ class ExchangeRate extends AbstractPageComponent {
         )
     }
 
+
+
     renderDatePicker() {
         return (
             <div className="form-group">
-                <label htmlFor="date">Date</label>
-                <input type="date" className="form-control" id="date" name="date" />
+                <div className="input-group ml-2 mr-2">
+                    <button type="button" className="btn btn-sm btn-secondary col-2">Prev</button>
+                    <input type="date" className="form-control small ml-2 mr-2" id="date" name="date"/>
+                    <button type="button" className="btn btn-sm btn-secondary col-2" disabled>Next</button>
+                </div>
             </div>
         )
     }

@@ -2,10 +2,8 @@
 
 namespace App\Service\Nbp;
 
-use App\Exception\CommunicationException;
 use App\Service\Nbp\Struct\CurrencyRate;
 use App\Service\Nbp\Struct\ExchangeRatesResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ExchangeRatesService
 {
@@ -78,8 +76,9 @@ class ExchangeRatesService
                 $currencyRate = new CurrencyRate(
                     $rate['currency'],
                     $rate['code'],
-                    isset($spread['buy']) ? $rate['mid'] - $spread['buy'] : null, //don't like floats here, nice to cast to Money object PLN here before calculations
-                    isset($spread['sell']) ? $rate['mid'] + $spread['sell'] : null //dont' like floats here, nice to cast to Money object PLN here before calculations
+                    // don't like floats here, nice to cast to Money object PLN here before calculations
+                    isset($spread['buy']) ? $rate['mid'] - $spread['buy'] : null,
+                    isset($spread['sell']) ? $rate['mid'] + $spread['sell'] : null
                 );
 
                 $rates[] = $currencyRate;
