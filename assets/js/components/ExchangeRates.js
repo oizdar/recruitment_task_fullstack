@@ -1,6 +1,6 @@
 // ./assets/js/components/Users.js
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import AbstractPageComponent from "./AbstractPageComponent.js";
 
@@ -9,8 +9,10 @@ class ExchangeRate extends AbstractPageComponent {
         this.getExchangeRates();
     }
 
-    getExchangeRates() {
-        const { date } = this.props.match.params;
+    getExchangeRates(date) {
+        if(!date) {
+            date = this.props.match.params.date;
+        }
         if(date === null) {
             this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
             return false;
@@ -27,21 +29,19 @@ class ExchangeRate extends AbstractPageComponent {
 
         this.setState({date: dateObject})
         axios.get(baseUrl + `/api/exchange-rates/` + dateString).then(response => {
-            console.log(response.status);
             let responseIsOK = response.status === 200
             this.setState({ responseData: response.data, responseIsOK: responseIsOK, loading: false})
         }).catch((error) => {
-            let message = "Don't found any rates :( - try again later";
+            let message = "Nie znaleziono danych :( - Spróbuj ponownie później";
             if (error.response.status === 422) {
                 message = error.response.data.error;
-
             }
+
             this.setState({ responseIsOK: false, loading: false, message: message});
         });
     }
 
     render() {
-        const loading = this.state.loading;
         return(
             <div>
                 <section className="row-section">
@@ -49,8 +49,7 @@ class ExchangeRate extends AbstractPageComponent {
                         <div className="row mt-5">
                             <div className="col-md-8 offset-md-2">
                                 <h2 className="text-center"><span>Exchange Rates</span> @ Telemedi</h2>
-
-                                {loading ? (
+                                {this.state.loading ? ( //todo: re-load only table without date picker
                                     <div className={'text-center'}>
                                         <span className="fa fa-spin fa-spinner fa-4x"></span>
                                     </div>
@@ -72,19 +71,67 @@ class ExchangeRate extends AbstractPageComponent {
         )
     }
 
-
-
     renderDatePicker() {
+        let today = new Date()
+        const disableNext =
+            this.state.date.toISOString().slice(0, 10) === today.toISOString().slice(0,10) //prevent hours diference
+            || this.state.date > today
+        console.log(disableNext)
+        const disablePrev = this.state.date <= new Date('2024-01-01 0:00') //todo: prevent timezone difference
+
+        console.log(disablePrev)
         return (
             <div className="form-group">
-                <div className="input-group ml-2 mr-2">
-                    <button type="button" className="btn btn-sm btn-secondary col-2">Prev</button>
-                    <input type="date" className="form-control small ml-2 mr-2" id="date" name="date"/>
-                    <button type="button" className="btn btn-sm btn-secondary col-2" disabled>Next</button>
+                <div className="input-group">
+                    <button type="button" className="btn btn-sm btn-secondary col-2"
+                            disabled={disablePrev}
+                            onClick={this.previousDay}>
+                        Prev
+                    </button>
+                    <input type="date"
+                           className="form-control small ml-2 mr-2"
+                           id="date"
+                           name="date"
+                           value={this.state.date.toISOString().slice(0,10)}
+                           onChange={this.updateRoute} />
+                    <button type="button" className="btn btn-sm btn-secondary col-2"
+                            disabled={disableNext}
+                            onClick={this.nextDay}>
+                        Next
+                    </button>
                 </div>
             </div>
         )
     }
+
+    updateRoute = (event) => {
+        this.setState({loading: true});
+        let date = new Date(event.target.value);
+        this.updateDay(date);
+    }
+
+
+    nextDay = () => {
+        this.setState({loading: true});
+        let date = new Date(this.state.date);
+        date.setDate(date.getDate() + 1);
+        this.updateDay(date);
+    }
+
+    previousDay = () => {
+        this.setState({loading: true});
+        let date = new Date(this.state.date);
+        date.setDate(date.getDate() - 1);
+        this.updateDay(date);
+    }
+
+    updateDay = (date) => {
+        this.setState({date: date});
+        this.props.history.push('/exchange-rates/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
+        this.getExchangeRates(date);
+    }
+
+
 
     renderTable() { //todo: move to separate component
         return (
