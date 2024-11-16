@@ -9,8 +9,11 @@ setupcheck:
     controller: App\Controller\DefaultController::setupCheck
 
 exchangerates:
-    path: /api/exchange-rates
+    path: /api/exchange-rates/{date}
     controller: App\Controller\ExchangeRatesController::index
+    methods: GET
+    requirements:
+        date: '\d{4}-\d{2}-\d{2}'
 
 index:
     path: /{wildcard}

@@ -3,18 +3,13 @@
 import React from 'react';
 import axios from 'axios';
 import AbstractPageComponent from "./AbstractPageComponent.js";
-import { useParams } from 'react-router-dom';
 
 class ExchangeRate extends AbstractPageComponent {
-
     componentDidMount() {
-        if(!this.validateDate()) {
-            return
-        }
         this.getExchangeRates();
     }
 
-    validateDate() {
+    getExchangeRates() {
         const { date } = this.props.match.params;
         if(date === null) {
             this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
@@ -27,24 +22,25 @@ class ExchangeRate extends AbstractPageComponent {
             return false;
         }
 
-       return true;
-    }
-
-    getExchangeRates() {
         const baseUrl = this.getBaseUrl();
+        let dateString = dateObject.toISOString().slice(0,10);
 
-        axios.get(baseUrl + `/api/exchange-rates`).then(response => {
+        this.setState({date: dateObject})
+        axios.get(baseUrl + `/api/exchange-rates/` + dateString).then(response => {
+            console.log(response.status);
             let responseIsOK = response.status === 200
-            this.setState({ data: response.data, responseIsOK: responseIsOK, loading: false})
-        }).catch(function (error) {
-            console.error(error);
-            this.setState({ responseIsOK: false, loading: false, message: "Don't found any rates :( - try again later"});
+            this.setState({ responseData: response.data, responseIsOK: responseIsOK, loading: false})
+        }).catch((error) => {
+            let message = "Don't found any rates :( - try again later";
+            if (error.response.status === 422) {
+                message = error.response.data.error;
+
+            }
+            this.setState({ responseIsOK: false, loading: false, message: message});
         });
     }
 
     render() {
-
-
         const loading = this.state.loading;
         return(
             <div>
@@ -103,7 +99,7 @@ class ExchangeRate extends AbstractPageComponent {
                 </thead>
                 <tbody>
                 {
-                    this.state.data.rates?.map((rate, index) => {
+                    this.state.responseData.rates?.map((rate, index) => {
                         return(<tr key={index}>
                             <td>{rate.code}</td>
                             <td>{rate.currency}</td>

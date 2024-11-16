@@ -9,7 +9,7 @@ class AbstractPageComponent extends Component {
     }
 
     getBaseUrl() {
-        return 'http://telemedi-zadanie.localhost'; //todo move to env file
+        return 'http://telemedi-zadanie.localhost'; //todo move to enviroment file
     }
 
 

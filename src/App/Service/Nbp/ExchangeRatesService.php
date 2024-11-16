@@ -4,6 +4,7 @@ namespace App\Service\Nbp;
 
 use App\Service\Nbp\Struct\CurrencyRate;
 use App\Service\Nbp\Struct\ExchangeRatesResponse;
+use App\Validator\DateRangeValidator;
 
 class ExchangeRatesService
 {
@@ -53,7 +54,7 @@ class ExchangeRatesService
 
     public function getExchangeRatesForDate(?\DateTimeInterface $date): ExchangeRatesResponse //todo otpional filters? +/-
     {
-        $apiResponse = $this->nbpClient->getExchangeRates();
+        $apiResponse = $this->nbpClient->getExchangeRates($date);
 
         return $this->mapByAvailableCurrencies($apiResponse);
 
@@ -89,5 +90,15 @@ class ExchangeRatesService
             new \DateTimeImmutable($apiResposne[0]['effectiveDate']),
             $rates
         );
+    }
+
+    public function validateDate(\DateTimeInterface $date): bool
+    {
+        $actualRateDate = new \DateTimeImmutable();
+        if ($actualRateDate < new \DateTimeImmutable('12:00')) {
+            $actualRateDate = $actualRateDate->modify('-1 day');
+        }
+        $dateValidator = new DateRangeValidator(new \DateTimeImmutable('2023-01-01'), $actualRateDate);
+        return $dateValidator->validate($date);
     }
 }

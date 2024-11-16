@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Service\Nbp\ExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExchangeRatesController extends AbstractController //todo abstract api controller or helper with error codes handling
@@ -18,10 +17,19 @@ class ExchangeRatesController extends AbstractController //todo abstract api con
         $this->exchangeRatesService = $exchangeRatesService;
     }
 
-    public function index(Request $request): Response
+    public function index(string $date): Response
     {
-
-        $responseContent = $this->exchangeRatesService->getExchangeRatesForDate(new \DateTime());
+        $date = new \DateTimeImmutable($date);
+        try {
+            $this->exchangeRatesService->validateDate($date);
+        } catch (\InvalidArgumentException $e) {
+            return new Response(
+                json_encode(['error' => $e->getMessage()]),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+                ['Content-type' => 'application/json']
+            );
+        }
+        $responseContent = $this->exchangeRatesService->getExchangeRatesForDate($date);
 
         return new Response(
             (string)$responseContent,

@@ -20,11 +20,11 @@ class ApiClient
     }
 
 
-    public function getExchangeRates(): array //todo otpional filters? +/-
+    public function getExchangeRates(\DateTimeInterface $date): array
     {
         $response = $this->httpClient->request(
             'GET',
-            sprintf("%s/%s?%s", $this->baseUrl, 'exchangerates/tables/A', self::FORMAT_STRING)
+            sprintf("%s/%s?%s", $this->baseUrl, 'exchangerates/tables/A/' . $date->format('Y-m-d'), self::FORMAT_STRING)
         );
 
         if($response->getStatusCode() !== 200) {
