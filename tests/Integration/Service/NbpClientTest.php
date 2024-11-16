@@ -13,12 +13,14 @@ class NbpClientTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->client = self::$container->get(ApiClient::class);
+        /** @var ApiClient $client */
+        $client = self::$container->get(ApiClient::class);
+        $this->client = $client;
     }
 
     public function testGetExchangeRates(): void
     {
-        $exchangeRate = $this->client->getExchangeRates();
+        $exchangeRate = $this->client->getExchangeRates(new \DateTimeImmutable('-1 day')); //prevent from failing before 12:00
 
         $this->assertArrayHasKey('table', $exchangeRate[0]);
         $this->assertArrayHasKey('no', $exchangeRate[0]);

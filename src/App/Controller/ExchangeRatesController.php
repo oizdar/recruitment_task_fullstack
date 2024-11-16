@@ -19,8 +19,8 @@ class ExchangeRatesController extends AbstractController //todo abstract api con
 
     public function index(string $date): Response
     {
-        $date = new \DateTimeImmutable($date);
         try {
+            $date = new \DateTimeImmutable($date);
             $this->exchangeRatesService->validateDate($date);
         } catch (\InvalidArgumentException $e) {
             return new Response(

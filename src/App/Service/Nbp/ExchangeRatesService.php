@@ -52,7 +52,7 @@ class ExchangeRatesService
     }
 
 
-    public function getExchangeRatesForDate(?\DateTimeInterface $date): ExchangeRatesResponse //todo otpional filters? +/-
+    public function getExchangeRatesForDate(?\DateTimeInterface $date): ExchangeRatesResponse
     {
         $apiResponse = $this->nbpClient->getExchangeRates($date);
 

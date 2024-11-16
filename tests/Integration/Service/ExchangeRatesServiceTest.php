@@ -22,9 +22,9 @@ class ExchangeRatesServiceTest extends KernelTestCase
 
     public function testGetExchangeRates(): void
     {
-        $exchangeRate = $this->exchangeRatesService->getExchangeRatesForDate(new \DateTime(), []);
+        $exchangeRate = $this->exchangeRatesService->getExchangeRatesForDate(new \DateTime('-1 day')); //prevent from failing before 12:00
 
-        $this->assertEquals((new \DateTimeImmutable())->format('Y-m-d'), $exchangeRate->getDate()->format('Y-m-d')); //todo: format const or create helper
+        $this->assertEquals((new \DateTimeImmutable('-1 day'))->format('Y-m-d'), $exchangeRate->getDate()->format('Y-m-d')); //todo: format const or create helper
 
         $rates = $exchangeRate->getRates();
         $this->assertCount(5, $rates); //todo: count get from config
