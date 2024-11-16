@@ -27,8 +27,10 @@ class ApiClient
             sprintf("%s/%s?%s", $this->baseUrl, 'exchangerates/tables/A/' . $date->format('Y-m-d'), self::FORMAT_STRING)
         );
 
-        if($response->getStatusCode() !== 200) {
-            throw new CommunicationException('Failed to communicate with NBP API'); //todo:  catch more specific exceptions here, add logger to client
+        if($response->getStatusCode() == 404) {
+            throw new CommunicationException('Brak danych');
+        } elseif($response->getStatusCode() != 200) {
+            throw new CommunicationException('Błąd komunikacji NBP API');
         }
 
         return $response->toArray();
