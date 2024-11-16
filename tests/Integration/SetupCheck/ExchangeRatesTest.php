@@ -7,16 +7,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExchangeRatesTest extends WebTestCase
 {
+    private $client;
+
+    public function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
     public function testExchangeRatesApiEndpoint(): void
     {
-        $client = static::createClient();
 
-        $date = new \DateTimeImmutable('-1 day'); //prevent from failing before 12:00
+        $date = new \DateTimeImmutable('previous weekday'); //prevent from failing before 12:00 or weekends
 
-        // test e.g. the profile page
-        $client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
+        $this->client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
         $this->assertResponseIsSuccessful();
-        $response = $client->getResponse();
+        $response = $this->client->getResponse();
         $this->assertJson($response->getContent());
         $responseData = json_decode($response->getContent(), TRUE);
         $this->assertArrayHasKey('date', $responseData);
@@ -28,29 +33,25 @@ class ExchangeRatesTest extends WebTestCase
         $this->assertArrayHasKey('sellPrice', $responseData['rates'][0]);
     }
 
-    public function testExchangeRatesApiEndpointValidationDayAfterToday(): void
+    public function testExchangeRatesApiEndpointValidationErrorWhenDayAfterToday(): void
     {
-        $client = static::createClient();
+        $date = new \DateTimeImmutable('+1 day');
 
-        $date = new \DateTimeImmutable('+1 day'); //prevent from failing before 12:00
-        // test e.g. the profile page
-        $client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
+        $this->client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $response = $client->getResponse();
+        $response = $this->client->getResponse();
         $this->assertJson($response->getContent());
         $responseData = json_decode($response->getContent(), TRUE);
         $this->assertArrayHasKey('error', $responseData);
     }
 
-    public function testExchangeRatesApiEndpointValidationDayBefore2023(): void
+    public function testExchangeRatesApiEndpointValidationWhenDayBefore2023(): void
     {
-        $client = static::createClient();
+        $date = new \DateTimeImmutable('2022-12-31');
 
-        $date = new \DateTimeImmutable('2022-12-31'); //prevent from failing before 12:00
-        // test e.g. the profile page
-        $client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
+        $this->client->request('GET', '/api/exchange-rates/' . $date->format('Y-m-d'));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $response = $client->getResponse();
+        $response = $this->client->getResponse();
         $this->assertJson($response->getContent());
         $responseData = json_decode($response->getContent(), TRUE);
         $this->assertArrayHasKey('error', $responseData);

@@ -2,6 +2,7 @@
 
 namespace App\Service\Nbp;
 
+use App\Exception\CommunicationException;
 use App\Service\Nbp\Struct\CurrencyRate;
 use App\Service\Nbp\Struct\ExchangeRatesResponse;
 use App\Validator\DateRangeValidator;
@@ -52,6 +53,9 @@ class ExchangeRatesService
     }
 
 
+    /**
+     * @throws CommunicationException
+     */
     public function getExchangeRatesForDate(?\DateTimeInterface $date): ExchangeRatesResponse
     {
         $apiResponse = $this->nbpClient->getExchangeRates($date);
@@ -78,6 +82,7 @@ class ExchangeRatesService
                     $rate['currency'],
                     $rate['code'],
                     // don't like floats here, nice to cast to Money object PLN here before calculations
+                    $rate['mid'],
                     isset($spread['buy']) ? $rate['mid'] - $spread['buy'] : null,
                     isset($spread['sell']) ? $rate['mid'] + $spread['sell'] : null
                 );

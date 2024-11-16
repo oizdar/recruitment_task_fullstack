@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\CommunicationException;
+use App\Helpers\ResponseHelper;
 use App\Service\Nbp\ExchangeRatesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,25 +25,13 @@ class ExchangeRatesController extends AbstractController //todo abstract api con
             $date = new \DateTimeImmutable($date);
             $this->exchangeRatesService->validateDate($date);
             $responseContent = $this->exchangeRatesService->getExchangeRatesForDate($date);
-        } catch (\InvalidArgumentException $e) {
-            return new Response(
-                json_encode(['error' => $e->getMessage()]),
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-                ['Content-type' => 'application/json']
-            );
-        } catch (CommunicationException $e) {
-            return new Response(
-                json_encode(['error' => $e->getMessage()]),
-                Response::HTTP_UNPROCESSABLE_ENTITY, //can use other code
-                ['Content-type' => 'application/json']
-            );
+        } catch (\InvalidArgumentException|CommunicationException $e) {
+            return ResponseHelper::unprocessableEntity($e->getMessage());
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonError('Server error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response(
-            (string)$responseContent,
-            Response::HTTP_OK,
-            ['Content-type' => 'application/json']
-        );
+        return ResponseHelper::jsonOk($responseContent->toArray());
     }
 
 }

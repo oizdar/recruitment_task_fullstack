@@ -7,15 +7,17 @@ class CurrencyRate
     private $currency;
     private $code;
 
+    private $nbpRate;
     private $buyPrice;
     private $sellPrice;
 
     const NOT_AVAILABLE = 'N/A';
 
-    public function __construct(string $currency, string $code, ?float $buyPrice, ?float $sellPrice) //todo: better to use Money object or maybe at least int ?
+    public function __construct(string $currency, string $code, ?float $nbpRate, ?float $buyPrice, ?float $sellPrice) //todo: better to use Money object or maybe at least int ?
     {
         $this->currency = $currency;
         $this->code = $code;
+        $this->nbpRate = $nbpRate;
         $this->buyPrice = $buyPrice;
         $this->sellPrice = $sellPrice;
     }
@@ -25,6 +27,7 @@ class CurrencyRate
         return [
             'currency' => $this->getCurrency(),
             'code' => $this->getCode(),
+            'nbpRate' => $this->getNbpRateFormatted(),
             'buyPrice' => $this->getBuyPriceFormatted(),
             'sellPrice' => $this->getSellPriceFormatted()
         ];
@@ -38,6 +41,11 @@ class CurrencyRate
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getNbpRateFormatted():string
+    {
+        return number_format($this->nbpRate, 5, ',', '');
     }
 
     public function getBuyPrice(): ?float

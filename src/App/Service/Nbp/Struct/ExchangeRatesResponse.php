@@ -15,14 +15,14 @@ class ExchangeRatesResponse
         $this->rates = $rates;
     }
 
-    public function __toString()
+    public function toArray()
     {
-        return json_encode([
+        return [
             'date' => $this->date->format('Y-m-d'),
             'rates' => array_map(function(CurrencyRate $rate) {
                 return $rate->toArray();
             }, $this->rates)
-        ]);
+        ];
     }
 
     public function getDate(): \DateTimeImmutable
