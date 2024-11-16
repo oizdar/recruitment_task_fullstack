@@ -7,6 +7,17 @@ import ExchangeRates from "./ExchangeRates";
 
 class Home extends Component {
 
+    getExchangeRatesTodayPath() {
+        let today = new Date();
+        if(today.getHours() < 12) {
+            today.setDate(today.getDate() - 1);
+        }
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        return `/exchange-rates/${yyyy}-${mm}-${dd}`;
+    }
+
     render() {
         return (
             <div>
@@ -27,7 +38,11 @@ class Home extends Component {
                 <Switch>
                     <Redirect exact from="/" to="/setup-check"/>
                     <Route path="/setup-check" component={SetupCheck} />
-                    <Route path="/exchange-rates" component={ExchangeRates} />
+                    <Route
+                        path="/exchange-rates/:date"
+                        render={(props) => <ExchangeRates {...props} />}
+                    />
+                    <Redirect exact from="/exchange-rates" to={this.getExchangeRatesTodayPath()}/>
                 </Switch>
             </div>
         )

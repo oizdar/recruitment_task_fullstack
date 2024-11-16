@@ -1,6 +1,6 @@
 // ./assets/js/components/Users.js
 
-import React, {Component} from 'react';
+import {Component} from 'react';
 
 class AbstractPageComponent extends Component {
     constructor() {
@@ -12,5 +12,12 @@ class AbstractPageComponent extends Component {
         return 'http://telemedi-zadanie.localhost'; //todo move to env file
     }
 
+
+    getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
 }
+
 export default AbstractPageComponent;

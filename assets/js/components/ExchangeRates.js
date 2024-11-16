@@ -3,25 +3,48 @@
 import React from 'react';
 import axios from 'axios';
 import AbstractPageComponent from "./AbstractPageComponent.js";
+import { useParams } from 'react-router-dom';
 
 class ExchangeRate extends AbstractPageComponent {
 
     componentDidMount() {
+        if(!this.validateDate()) {
+            return
+        }
         this.getExchangeRates();
+    }
+
+    validateDate() {
+        const { date } = this.props.match.params;
+        if(date === null) {
+            this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
+            return false;
+        }
+
+        let dateObject = new Date(date);
+        if (dateObject == 'Invalid Date') { // can be done better
+            this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
+            return false;
+        }
+
+       return true;
     }
 
     getExchangeRates() {
         const baseUrl = this.getBaseUrl();
+
         axios.get(baseUrl + `/api/exchange-rates`).then(response => {
             let responseIsOK = response.status === 200
-            this.setState({ data: response.data, setupCheck: responseIsOK, loading: false})
+            this.setState({ data: response.data, responseIsOK: responseIsOK, loading: false})
         }).catch(function (error) {
             console.error(error);
-            this.setState({ setupCheck: false, loading: false});
+            this.setState({ responseIsOK: false, loading: false, message: "Don't found any rates :( - try again later"});
         });
     }
 
     render() {
+
+
         const loading = this.state.loading;
         return(
             <div>
@@ -38,10 +61,10 @@ class ExchangeRate extends AbstractPageComponent {
                                 ) : (
                                     <div className={'text-center'}>
                                 {this.renderDatePicker()}
-                                {this.state.setupCheck === true ? (
+                                {this.state.responseIsOK === true ? (
                                     this.renderTable()
                                         ) : (
-                                            <h3 className={'text-error text-bold'}><strong>Dont found any rates :( - try again later</strong></h3>
+                                            <h3 className={'text-error text-bold'}><strong>{this.state.message}</strong></h3>
                                         )}
                                     </div>
                                 )}
@@ -67,7 +90,7 @@ class ExchangeRate extends AbstractPageComponent {
         )
     }
 
-    renderTable() {
+    renderTable() { //todo: move to separate component
         return (
             <table className="table">
                 <thead>
@@ -80,8 +103,8 @@ class ExchangeRate extends AbstractPageComponent {
                 </thead>
                 <tbody>
                 {
-                    this.state.data.rates?.map((rate) => {
-                        return(<tr>
+                    this.state.data.rates?.map((rate, index) => {
+                        return(<tr key={index}>
                             <td>{rate.code}</td>
                             <td>{rate.currency}</td>
                             <td>{rate.buyPrice}</td>
