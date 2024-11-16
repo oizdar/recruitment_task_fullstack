@@ -22,7 +22,7 @@ class ExchangeRatesServiceTest extends KernelTestCase
 
     public function testGetExchangeRates(): void
     {
-        $exchangeRate = $this->exchangeRatesService->getExchangeRatesForDate(new \DateTime('-1 day')); //prevent from failing before 12:00
+        $exchangeRate = $this->exchangeRatesService->getExchangeRatesForDate(new \DateTime('previous weekday')); //prevent from failing before 12:00 or weekends
 
         $this->assertEquals((new \DateTimeImmutable('-1 day'))->format('Y-m-d'), $exchangeRate->getDate()->format('Y-m-d')); //todo: format const or create helper
 
@@ -39,6 +39,7 @@ class ExchangeRatesServiceTest extends KernelTestCase
             }
         }
     }
+
 
 
 }

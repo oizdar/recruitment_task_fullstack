@@ -6,6 +6,11 @@ import AbstractPageComponent from "./AbstractPageComponent.js";
 
 class SetupCheck extends AbstractPageComponent {
 
+    constructor() {
+        super();
+        this.state = { setupCheck: {}, loading: true};
+    }
+
     componentDidMount() {
         this.checkApiSetup();
     }

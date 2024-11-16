@@ -64,6 +64,16 @@ class ExchangeRatesService
 
     }
 
+    /**
+     * @throws CommunicationException
+     */
+    public function getLatestExchangeRates()
+    {
+        $apiResponse = $this->nbpClient->getLatestExchangeRates();
+
+        return $this->mapByAvailableCurrencies($apiResponse);
+    }
+
     private function mapByAvailableCurrencies(array $apiResposne): ExchangeRatesResponse
     {
         $rates = [];

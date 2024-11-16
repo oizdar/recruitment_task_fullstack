@@ -34,4 +34,17 @@ class ExchangeRatesController extends AbstractController //todo abstract api con
         return ResponseHelper::jsonOk($responseContent->toArray());
     }
 
+
+    public function latest(): Response
+    {
+        try {
+            $responseContent = $this->exchangeRatesService->getLatestExchangeRates();
+        } catch (CommunicationException $e) {
+            return ResponseHelper::unprocessableEntity($e->getMessage());
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonError('Server error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseHelper::jsonOk($responseContent->toArray());
+    }
 }

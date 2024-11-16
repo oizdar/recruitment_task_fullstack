@@ -20,7 +20,7 @@ class NbpClientTest extends KernelTestCase
 
     public function testGetExchangeRates(): void
     {
-        $exchangeRate = $this->client->getExchangeRates(new \DateTimeImmutable('-1 day')); //prevent from failing before 12:00
+        $exchangeRate = $this->client->getExchangeRates(new \DateTimeImmutable('previous weekday')); //prevent from failing before 12:00 or weekends
 
         $this->assertArrayHasKey('table', $exchangeRate[0]);
         $this->assertArrayHasKey('no', $exchangeRate[0]);
