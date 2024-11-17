@@ -4,7 +4,7 @@ import React, {useEffect} from 'react';
 import axios from 'axios';
 import AbstractPageComponent from "./AbstractPageComponent.js";
 
-class ExchangeRates extends AbstractPageComponent {
+class ExchangeRatesV2 extends AbstractPageComponent {
 
     constructor() {
         super();
@@ -71,32 +71,17 @@ class ExchangeRates extends AbstractPageComponent {
                         <div className="row mt-5">
                             <div className="col-md-8 offset-md-2">
                                 <h2 className="text-center"><span>Exchange Rates</span> @ Telemedi</h2>
-                                {this.state.loading ? ( //todo: re-load only table without date picker
+                                {this.state.loadingLatest && this.state.loading ? ( //todo: re-load only table without date picker
                                     <div className={'text-center'}>
                                         <span className="fa fa-spin fa-spinner fa-4x"></span>
                                     </div>
                                 ) : (
                                     <div className={'text-center'}>
                                 {this.renderDatePicker()}
-                                {this.state.responseIsOK === true ? (
-                                    this.renderTableRates()
+                                {this.state.responseLatestIsOk === true ? (
+                                    this.renderTableWithComparison()
                                         ) : (
                                             <h3 className={'text-error text-bold'}><strong>{this.state.message}</strong></h3>
-                                        )}
-                                    </div>
-                                )}
-                                {this.state.loadingLatest ? (
-                                    <div className={'text-center'}>
-                                        <span className="fa fa-spin fa-spinner fa-4x"></span>
-                                    </div>
-                                ) : (
-                                    <div className={'text-center mt-5'}>
-                                        <h2 className="text-center">Latest Exchange Rates: {new Date(this.state.responseLatestData?.date).toLocaleDateString()}</h2>
-                                        {this.state.responseLatestIsOk === true ? (
-                                            this.renderTableLatest()
-                                        ) : (
-                                            <h3 className={'text-error text-bold'}>
-                                                <strong>{this.state.messageLatest}</strong></h3>
                                         )}
                                     </div>
                                 )}
@@ -165,25 +150,43 @@ class ExchangeRates extends AbstractPageComponent {
 
     updateDay = (date) => {
         this.setState({date: date});
-        this.props.history.push('/exchange-rates/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
+        this.props.history.push('/exchange-rates-v2/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
         this.getExchangeRates(date);
     }
 
-    renderTableRates() { //todo: move to separate component
-        return (
-            <table className="table">
-                <thead>
-                <tr>
-                    <th scope="col">Code</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">NBP Price</th>
-                    <th scope="col">Buy Price</th>
-                    <th scope="col">Sell Price</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    this.state.responseData?.rates?.map((rate, index) => {
+    renderTableWithComparison() {
+        return (<table className="table text-center">
+            <thead>
+            <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">NBP Price</th>
+                <th scope="col">Buy Price</th>
+                <th scope="col">Sell Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            { !!this.state.responseData?.rates === true
+                ? this.state.responseLatestData?.rates?.map((latestRate, index) => {
+                    let foundRate = this.state.responseLatestData?.rates?.find(rate => rate.code === latestRate.code)
+                    console.log(foundRate)
+                    return (
+                        <tr key={index}>
+                            <td>{latestRate.code}</td>
+                            <td>{latestRate.currency}</td>
+                            <td>{foundRate.nbpRate}</td>
+                            <td>{foundRate.buyPrice}</td>
+                            <td>{foundRate.sellPrice}</td>
+                        </tr>) //this dont work
+                        + (<tr key={index}>
+                            <td colSpan={2}>Aktualny kurs</td>
+                            <td>{latestRate.nbpRate}</td>
+                            <td>{latestRate.buyPrice}</td>
+                            <td>{latestRate.sellPrice}</td>
+                        </tr>
+                    )
+                })
+                : this.state.responseLatestData?.rates?.map((rate, index) => {
                         return (<tr key={index}>
                             <td>{rate.code}</td>
                             <td>{rate.currency}</td>
@@ -192,40 +195,10 @@ class ExchangeRates extends AbstractPageComponent {
                             <td>{rate.sellPrice}</td>
                         </tr>)
                     })
-                }
-                </tbody>
-            </table>
-        )
-    }
-
-    renderTableLatest() { //todo: move to separate component
-        return (
-            <table className="table">
-                <thead>
-                <tr>
-                    <th scope="col">Code</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">NBP Price</th>
-                    <th scope="col">Buy Price</th>
-                    <th scope="col">Sell Price</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    this.state.responseLatestData?.rates?.map((rate, index) => {
-                        return (<tr key={index}>
-                            <td>{rate.code}</td>
-                            <td>{rate.currency}</td>
-                            <td>{rate.nbpRate}</td>
-                            <td>{rate.buyPrice}</td>
-                            <td>{rate.sellPrice}</td>
-                        </tr>)
-                    })
-                }
-                </tbody>
-            </table>
-        )
+            }
+            </tbody>
+        </table>)
     }
 }
 
-export default ExchangeRates;
+export default ExchangeRatesV2;

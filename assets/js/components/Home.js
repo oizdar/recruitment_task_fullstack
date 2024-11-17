@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import {Route, Redirect, Switch, Link} from 'react-router-dom';
 import SetupCheck from "./SetupCheck";
 import ExchangeRates from "./ExchangeRates";
+import ExchangeRatesV2 from "./ExchangeRatesV2";
 
 class Home extends Component {
 
@@ -43,6 +44,11 @@ class Home extends Component {
                         render={(props) => <ExchangeRates {...props} />}
                     />
                     <Redirect exact from="/exchange-rates" to={this.getExchangeRatesTodayPath()}/>
+                    <Route
+                        path="/exchange-rates-v2/:date"
+                        render={(props) => <ExchangeRatesV2 {...props} />}
+                    />
+                    <Redirect exact from="/exchange-rates-v2" to={this.getExchangeRatesTodayPath()}/>
                 </Switch>
             </div>
         )
