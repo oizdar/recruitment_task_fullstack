@@ -5,6 +5,19 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     nbp_api_base_url: '%env(NBP_API_BASE_URL)%'
+    available_currencies: '%env(csv:AVAILABLE_CURRENCIES)%'
+    default_spread:
+        buy: '%env(DEFAULT_SPREAD_BUY)%'
+        sell: '%env(DEFAULT_SPREAD_SELL)%'
+    custom_spread:
+        USD:
+            buy: '%env(USD_CUSTOM_SPREAD_BUY)%'
+            sell: '%env(USD_CUSTOM_SPREAD_SELL)%'
+        EUR:
+            buy: '%env(EUR_CUSTOM_SPREAD_BUY)%'
+            sell: '%env(EUR_CUSTOM_SPREAD_SELL)%'
+
+
 
 services:
     # default configuration for services in *this* file
@@ -33,3 +46,10 @@ services:
     App\Service\Nbp\ApiClient:
         arguments:
             $baseUrl: '%nbp_api_base_url%'
+
+    App\Service\Nbp\ExchangeRatesService:
+        arguments:
+            $availableCurrencies: '%available_currencies%'
+            $defaultSpread: '%default_spread%'
+            $customSpread: '%custom_spread%'
+            $nbpApiClient: '@App\Service\Nbp\ApiClient'
