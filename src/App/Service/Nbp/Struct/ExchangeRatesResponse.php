@@ -9,10 +9,18 @@ class ExchangeRatesResponse
     /** @var CurrencyRate[]  */
     private $rates;
 
+    /** @var CurrencyCalculations[]  */
+    private $calculations;
+
     public function __construct( \DateTimeImmutable $date, array $rates)
     {
         $this->date = $date;
         $this->rates = $rates;
+    }
+
+    public function setCalculations($calculations)
+    {
+        $this->calculations = $calculations;
     }
 
     public function toArray()
@@ -21,7 +29,10 @@ class ExchangeRatesResponse
             'date' => $this->date->format('Y-m-d'),
             'rates' => array_map(function(CurrencyRate $rate) {
                 return $rate->toArray();
-            }, $this->rates)
+            }, $this->rates),
+            'calculations' => array_map(function(CurrencyCalculations $calculations) {
+                return $calculations->toArray();
+            }, $this->calculations),
         ];
     }
 

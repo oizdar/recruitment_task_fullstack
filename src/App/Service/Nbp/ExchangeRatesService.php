@@ -3,6 +3,8 @@
 namespace App\Service\Nbp;
 
 use App\Exception\CommunicationException;
+use App\Service\Nbp\Struct\CurrencyCalculation;
+use App\Service\Nbp\Struct\CurrencyCalculations;
 use App\Service\Nbp\Struct\CurrencyRate;
 use App\Service\Nbp\Struct\ExchangeRatesResponse;
 use App\Validator\DateRangeValidator;
@@ -68,10 +70,16 @@ class ExchangeRatesService
             $rates[] = $currencyRate;
         }
 
-        return new ExchangeRatesResponse(
+
+        $exchangeRates = new ExchangeRatesResponse(
             new \DateTimeImmutable($apiResposne[0]['effectiveDate']),
             $rates
         );
+
+
+        $exchangeRates->setCalculations($this->calculateRatesByThemselves($rates));
+
+        return $exchangeRates;
     }
 
     public function validateDate(\DateTimeInterface $date): bool
@@ -82,5 +90,34 @@ class ExchangeRatesService
         }
         $dateValidator = new DateRangeValidator(new \DateTimeImmutable('2023-01-01'), $actualRateDate);
         return $dateValidator->validate($date);
+    }
+
+    /**
+     * @param $rates array<CurrencyRate>
+     */
+    private function calculateRatesByThemselves(array $rates)
+    {
+        $result = [];
+        foreach($rates as $rate) {
+            $calculations = [];
+            foreach ($rates as $secondRate) {
+                if($rate->getCode() === $secondRate->getCode()) {
+                    continue;
+                }
+                $calculations[] = new CurrencyCalculation(
+                    $secondRate->getCurrency(),
+                    $secondRate->getCode(),
+                    $rate->getBuyPrice() && $secondRate->getSellPrice() ?  $secondRate->getSellPrice() / $rate->getBuyPrice() : null,
+                    $rate->getSellPrice() && $secondRate->getBuyPrice() ? $secondRate->getBuyPrice() / $rate->getSellPrice() : null
+                );
+            }
+
+            $result[] = new CurrencyCalculations(
+                $rate->getCurrency(),
+                $rate->getCode(),
+                $calculations
+            );
+        }
+        return $result;
     }
 }

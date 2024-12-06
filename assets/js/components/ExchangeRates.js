@@ -79,7 +79,10 @@ class ExchangeRate extends AbstractPageComponent {
                                     <div className={'text-center'}>
                                 {this.renderDatePicker()}
                                 {this.state.responseIsOK === true ? (
-                                    this.renderTableRates()
+                                     <div>
+                                         {this.renderTableRates()}
+                                         {this.renderCalculation()}
+                                     </div>
                                         ) : (
                                             <h3 className={'text-error text-bold'}><strong>{this.state.message}</strong></h3>
                                         )}
@@ -142,6 +145,41 @@ class ExchangeRate extends AbstractPageComponent {
         )
     }
 
+    renderCalculation() {
+        console.log(this.state.responseData?.calculations);
+        return (
+            <table className="table">
+                <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Buy Price</th>
+                    <th scope="col">Sell Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    this.state.responseData?.calculations.map((rate, index) => {
+                        return rate.calculation.map((calculation, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{calculation.code}</td>
+                                    <td>{calculation.currency}</td>
+                                    <td>{calculation.buyPrice} {calculation.buyPrice === 'N/A' ? null : rate.code}</td>
+                                    <td>{calculation.sellPrice} {calculation.sellPrice === 'N/A' ? null : rate.code}</td>
+                                </tr>
+                            )
+                        })
+
+
+
+                    })
+                }
+                </tbody>
+            </table>
+        )
+    }
+
     changeDate = (event) => {
         this.setState({loading: true});
         let date = new Date(event.target.value);
@@ -168,7 +206,6 @@ class ExchangeRate extends AbstractPageComponent {
         this.props.history.push('/exchange-rates/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
         this.getExchangeRates(date);
     }
-
 
 
     renderTableRates() { //todo: move to separate component
