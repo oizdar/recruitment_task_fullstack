@@ -79,7 +79,10 @@ class ExchangeRates extends AbstractPageComponent {
                                     <div className={'text-center'}>
                                 {this.renderDatePicker()}
                                 {this.state.responseIsOK === true ? (
-                                    this.renderTableRates()
+                                     <div>
+                                         {this.renderTableRates()}
+                                         {this.renderCalculation()}
+                                     </div>
                                         ) : (
                                             <h3 className={'text-error text-bold'}><strong>{this.state.message}</strong></h3>
                                         )}
@@ -139,6 +142,41 @@ class ExchangeRates extends AbstractPageComponent {
                     </button>
                 </div>
             </div>
+        )
+    }
+
+    renderCalculation() {
+        console.log(this.state.responseData?.calculations);
+        return (
+            <table className="table">
+                <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Buy Price</th>
+                    <th scope="col">Sell Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    this.state.responseData?.calculations.map((rate, index) => {
+                        return rate.calculation.map((calculation, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{calculation.code}</td>
+                                    <td>{calculation.currency}</td>
+                                    <td>{calculation.buyPrice} {calculation.buyPrice === 'N/A' ? null : rate.code}</td>
+                                    <td>{calculation.sellPrice} {calculation.sellPrice === 'N/A' ? null : rate.code}</td>
+                                </tr>
+                            )
+                        })
+
+
+
+                    })
+                }
+                </tbody>
+            </table>
         )
     }
 
