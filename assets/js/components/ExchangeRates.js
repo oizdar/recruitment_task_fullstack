@@ -203,7 +203,7 @@ class ExchangeRates extends AbstractPageComponent {
 
     updateDay = (date) => {
         this.setState({date: date});
-        this.props.history.push('/exchange-rates/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
+        this.props.history.push('/exchange-rates-old/' + date.toISOString().slice(0, 10)); // todo: don't know how to use proper Redirect / router with object initialization
         this.getExchangeRates(date);
     }
 

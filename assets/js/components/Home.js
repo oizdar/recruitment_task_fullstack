@@ -8,7 +8,7 @@ import ExchangeRatesV2 from "./ExchangeRatesV2";
 
 class Home extends Component {
 
-    getExchangeRatesTodayPath() {
+    getExchangeRatesTodayPath(path) {
         let today = new Date();
         if(today.getHours() < 12) {
             today.setDate(today.getDate() - 1);
@@ -16,7 +16,7 @@ class Home extends Component {
         const dd = String(today.getDate()).padStart(2, '0');
         const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         const yyyy = today.getFullYear();
-        return `/exchange-rates/${yyyy}-${mm}-${dd}`;
+        return `${path}/${yyyy}-${mm}-${dd}`;
     }
 
     render() {
@@ -32,6 +32,9 @@ class Home extends Component {
                             <li className="nav-item">
                                 <Link className={"nav-link"} to={"/exchange-rates"}> Exchange Rates </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className={"nav-link"} to={"/exchange-rates-old"}> Exchange Rates (OLD)</Link>
+                            </li>
 
                         </ul>
                     </div>
@@ -40,15 +43,15 @@ class Home extends Component {
                     <Redirect exact from="/" to="/setup-check"/>
                     <Route path="/setup-check" component={SetupCheck} />
                     <Route
-                        path="/exchange-rates/:date"
+                        path="/exchange-rates-old/:date"
                         render={(props) => <ExchangeRates {...props} />}
                     />
-                    <Redirect exact from="/exchange-rates" to={this.getExchangeRatesTodayPath()}/>
+                    <Redirect exact from="/exchange-rates-old" to={this.getExchangeRatesTodayPath('/exchange-rates-old')}/>
                     <Route
-                        path="/exchange-rates-v2/:date"
+                        path="/exchange-rates/:date"
                         render={(props) => <ExchangeRatesV2 {...props} />}
                     />
-                    <Redirect exact from="/exchange-rates-v2" to={this.getExchangeRatesTodayPath()}/>
+                    <Redirect exact from="/exchange-rates" to={this.getExchangeRatesTodayPath('/exchange-rates')}/>
                 </Switch>
             </div>
         )
