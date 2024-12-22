@@ -12,21 +12,19 @@ class Loader extends Component {
     render() {
         let rate = this.props.rate
         return  (
-            <div className="exchange-rates-position card">
-                <div className="card-body">
-                    <h4 className="card-title">
-                        {rate.code}
+                <div className="row exchange-rates-position">
+                    <h4 className="col-3">
+                        {rate.currency}
                     </h4>
-                    <h5 className="card-subtitle">
-                       {rate.currency}
+                    <h5 className="col-3">
+                       {rate.code}
                     </h5>
-                    <ul className="list-group list-group-flush">
-                        <li className="list-group-item">NBP: {rate.nbpRate}</li>
-                        <li className="list-group-item">Cena zakupu: {rate.buyPrice}</li>
-                        <li className="list-group-item">Cena sprzedaży: {rate.sellPrice}</li>
-                    </ul>
+                    <div className="col-6">
+                        <div className="row">Kupno: {rate.buyPrice}</div>
+                        <div className="row">NBP: {rate.nbpRate}</div>
+                        <div className="row">Sprzedaż: {rate.sellPrice}</div>
+                    </div>
                 </div>
-            </div>
         )
     }
 

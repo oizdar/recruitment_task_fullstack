@@ -1,7 +1,7 @@
 // ./assets/js/components/Users.js
 
 import React from 'react';
-import RatesList from "./RatesList";
+import RatesList from "./ExchangeRates/RatesList";
 import AbstractPageComponent from "./AbstractPageComponent";
 import axios from "axios";
 import ErrorMessage from "./Common/ErrorMessage";
@@ -12,7 +12,8 @@ class ExchangeRatesV2 extends AbstractPageComponent {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            date: null,
+            loading: true,
             responseIsOK: false,
             errorMessage: 'Undefined Error',
             responseData: [],
@@ -23,7 +24,6 @@ class ExchangeRatesV2 extends AbstractPageComponent {
         this.getExchangeRates();
     }
     getExchangeRates(date) {
-        console.log(date);
         if(!date) {
             date = this.props.match.params.date;
         }
@@ -56,7 +56,6 @@ class ExchangeRatesV2 extends AbstractPageComponent {
     }
 
     render() {
-        const date = this.props.date;
         return (
             <div>
                 <section className="row-section">
@@ -65,7 +64,7 @@ class ExchangeRatesV2 extends AbstractPageComponent {
                             this.state.loading
                                 ? (<Loader/>)
                                 : (this.state.responseIsOK
-                                    ? (<RatesList rates={this.state.responseData.rates}/>)
+                                    ? (<RatesList rates={this.state.responseData.rates} date={this.state.date}/>)
                                     : (<ErrorMessage message={this.state.errorMessage}/>)
                                 )
                         }
