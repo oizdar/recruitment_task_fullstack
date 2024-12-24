@@ -27,9 +27,9 @@ class CurrencyRate
         return [
             'currency' => $this->getCurrency(),
             'code' => $this->getCode(),
-            'nbpRate' => $this->getNbpRateFormatted(),
-            'buyPrice' => $this->getBuyPriceFormatted(),
-            'sellPrice' => $this->getSellPriceFormatted()
+            'nbpRate' => $this->getNbpRate(),
+            'buyPrice' => $this->getBuyPrice(),
+            'sellPrice' => $this->getSellPrice()
         ];
     }
 
@@ -43,29 +43,21 @@ class CurrencyRate
         return $this->code;
     }
 
-    public function getNbpRateFormatted():string
-    {
-        return number_format($this->nbpRate, 5, ',', '');
-    }
 
     public function getBuyPrice(): ?float
     {
-        return $this->buyPrice;
+        return $this->buyPrice ? round($this->buyPrice, 5) : null;
     }
 
-    public function getBuyPriceFormatted():string
-    {
-        return $this->buyPrice ? number_format($this->buyPrice, 5, ',', '') : static::NOT_AVAILABLE;
-    }
 
     public function getSellPrice(): ?float
     {
-        return $this->sellPrice;
+        return $this->sellPrice ? round($this->sellPrice, 5) : null;
     }
 
-    public function getSellPriceFormatted(): string
+    public function getNbpRate(): ?float
     {
-        return $this->sellPrice ? number_format($this->sellPrice, 5, ',', '') : static::NOT_AVAILABLE;
+        return $this->sellPrice ? round($this->nbpRate, 5) : null;
     }
 
 }

@@ -7,32 +7,65 @@ class Position extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props)
+        this.rate = this.props.rate
+        this.latestRate = this.props.latestRate
+        console.log(this.rate, this.latestRate)
     }
 
     render() {
-        let rate = this.props.rate
-        let latestRate = this.props.latestRate
+
         return  (
                 <div className="row exchange-rates-position">
                     <h4 className="col-3">
-                        {rate.currency}
+                        {this.rate.currency}
                     </h4>
                     <h5 className="col-1">
-                       {rate.code}
+                       {this.rate.code}
                     </h5>
                     <div className="col-7 offset-1">
-                        <div className="row">Kupno: {rate.buyPrice}</div>
-                        {latestRate ? (<div className="row">Ostatni kurs kupna: {latestRate.buyPrice}</div>) : null}
-                        <div className="row">NBP: {rate.nbpRate}</div>
-                        {latestRate ? (<div className="row">Ostatni kurs NBP: {latestRate.nbpRate}</div>) : null}
-                        <div className="row">Sprzedaż: {rate.sellPrice}</div>
-                        {latestRate ? (<div className="row">Ostatni kurs sprzedaży: {latestRate.sellPrice}</div>) : null}
+                        <div className="row">
+                            <div className="col-4">
+                                {this.rate.buyPrice ? this.formatCurrency(this.rate.buyPrice) : 'N/A'} <span className={"badge badge-pill badge-info text-middle"}>{this.getBuyPriceDiff()}</span>
+                            </div>
+                            <div className="col-4">
+                                {this.rate.nbpRate ? this.formatCurrency(this.rate.nbpRate) : 'N/A'} <span className={" badge badge-pill badge-info text-middle"}>{this.getNbpRateDiff()}</span>
+                            </div>
+                            <div className="col-4">
+                                {this.rate.sellPrice ? this.formatCurrency(this.rate.sellPrice) : 'N/A'} <span className={" badge badge-pill badge-info text-middle"}>{this.getSellPriceDiff()}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
         )
     }
 
+    getBuyPriceDiff() {
+        if (!this.latestRate?.buyPrice || !this.rate?.buyPrice) {
+            return null;
+        }
+
+        return this.formatCurrency(this.rate.buyPrice - this.latestRate.buyPrice, 3);
+    }
+
+    getSellPriceDiff() {
+        if (!this.latestRate?.sellPrice || !this.rate?.sellPrice) {
+            return null;
+        }
+
+        return this.formatCurrency(this.rate.sellPrice - this.latestRate.sellPrice, 3)
+    }
+
+    getNbpRateDiff() {
+        if (!this.latestRate?.nbpRate || !this.rate?.nbpRate) {
+            return null;
+        }
+
+        return this.formatCurrency(this.rate.nbpRate - this.latestRate.nbpRate, 3);
+    }
+
+    formatCurrency(number, precision = 5) { //todo nice to move to utils helper
+        return number ? number.toFixed(precision).toLocaleString('pl-PL') + 'zł' : null;
+    }
 }
 
 export default Position;
