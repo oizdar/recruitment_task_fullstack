@@ -146,7 +146,6 @@ class ExchangeRates extends AbstractPageComponent {
     }
 
     renderCalculation() {
-        console.log(this.state.responseData?.calculations);
         return (
             <table className="table">
                 <thead>

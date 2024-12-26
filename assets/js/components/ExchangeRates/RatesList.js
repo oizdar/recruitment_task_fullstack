@@ -9,7 +9,9 @@ class RatesList extends Component {
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            isOpen: []
+        }
     }
 
     render() {
@@ -60,9 +62,13 @@ class RatesList extends Component {
                                         {
                                             this.props.rates?.map((rate) => {
                                                 return (
-                                                    <div className="list-group-item" key={rate.code}>
-                                                        <Position rate={rate}
-                                                                  latestRate={this.props.latestRates.find((latestRate) => latestRate.code === rate.code)}/>
+                                                    <div className="list-group-item list-group-item-action" key={rate.code} onClick={() => this.openDetails(rate.code)}>
+                                                        <Position
+                                                            rate={rate}
+                                                            latestRate={this.props.latestRates.find((latestRate) => latestRate.code === rate.code)}
+                                                            isOpen={this.state.isOpen[rate.code]}
+                                                            latestDate={this.props.latestDate}
+                                                        />
                                                     </div>
                                                 )
                                             }, this)
@@ -78,6 +84,10 @@ class RatesList extends Component {
                 </div>
             </div>
         )
+    }
+
+    openDetails(key) {
+        this.setState((state, props) => ({isOpen: { ...state.isOpen, [key]: !state.isOpen[key]}}));
     }
 
 }
