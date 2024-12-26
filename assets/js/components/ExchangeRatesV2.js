@@ -83,7 +83,7 @@ class ExchangeRatesV2 extends AbstractPageComponent {
                     <div className="container exchange-rates-container">
                         <RatesList
                             date={this.state.date}
-                            loading={this.state.loading && this.state.loadingLatest}
+                            loading={this.state.loading || this.state.loadingLatest}
                             rates={this.state.responseData.rates}
                             responsesAreOK={this.state.responseIsOK && this.state.responseLatestIsOk}
                             latestRates={this.state.latestRatesResponse?.rates}
