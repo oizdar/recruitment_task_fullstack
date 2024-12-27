@@ -48,29 +48,24 @@ class Position extends Component {
                     </div>
                 </div>
             </div>
-            {
-                this.props.isOpen
-                    ? (
-                        <div className="row exchange-rates-position-sub">
-                            <span className="col-5 date">
-                                { 'Kurs na dzień ' + this.latestDate.toLocaleDateString() + ':'}
-                            </span>
-                            <div className="col-7">
-                                <div className="row">
-                                    <div className="col-4">
-                                        {this.latestRate.buyPrice ? this.formatCurrency(this.latestRate.buyPrice) : '-'}
-                                    </div>
-                                    <div className="col-4">
-                                        {this.latestRate.nbpRate ? this.formatCurrency(this.latestRate.nbpRate) : '-'}
-                                    </div>
-                                    <div className="col-4">
-                                        {this.latestRate.sellPrice ? this.formatCurrency(this.latestRate.sellPrice) : '-'}
-                                    </div>
-                                </div>
-                            </div>
+            <div className={`row exchange-rates-position-sub ${ this.props.isOpen ? 'visible' : ''}` }>
+                <span className="col-5 date">
+                    { 'Ceny na dzień ' + this.latestDate.toLocaleDateString() + ':'}
+                </span>
+                <div className="col-7">
+                    <div className="row">
+                        <div className="col-4">
+                            {this.latestRate.buyPrice ? this.formatCurrency(this.latestRate.buyPrice) : '-'}
                         </div>
-                    ) : null
-            }
+                        <div className="col-4">
+                            {this.latestRate.nbpRate ? this.formatCurrency(this.latestRate.nbpRate) : '-'}
+                        </div>
+                        <div className="col-4">
+                            {this.latestRate.sellPrice ? this.formatCurrency(this.latestRate.sellPrice) : '-'}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>)
     }
 

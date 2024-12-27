@@ -56,7 +56,7 @@ class ApiClient
     private function handleResponseErrors(ResponseInterface $response)
     {
         if($response->getStatusCode() == 404) {
-            throw new CommunicationException('Brak danych');
+            throw new CommunicationException('Brak danych dla podanej daty');
         } elseif($response->getStatusCode() != 200) {
             throw new CommunicationException('Błąd komunikacji NBP API');
         }

@@ -34,13 +34,13 @@ class ExchangeRatesV2 extends AbstractPageComponent {
         }
 
         if(date === null) {
-            this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
+            this.setState({responseIsOK: false, loading: false, message: "Niepoprawny format daty"});
             return false;
         }
 
         let dateObject = new Date(date);
         if (dateObject == 'Invalid Date') { // can be done better
-            this.setState({responseIsOK: false, loading: false, message: "Invalid date"});
+            this.setState({responseIsOK: false, loading: false, message: "Niepoprawny format daty"});
             return false;
         }
 
@@ -52,12 +52,7 @@ class ExchangeRatesV2 extends AbstractPageComponent {
             let responseIsOK = response.status === 200
             this.setState({ responseData: response.data, responseIsOK: responseIsOK, loading: false})
         }).catch((error) => {
-            let errorMessage = "Data not found :( - Try again later";
-            if (error.response.status === 422) {
-                errorMessage = error.response.data.error;
-            }
-
-            this.setState({ responseIsOK: false, loading: false, errorMessage: errorMessage});
+            this.setState({ responseIsOK: false, loading: false, errorMessage: error.response.data.error});
         });
     }
 
@@ -90,12 +85,25 @@ class ExchangeRatesV2 extends AbstractPageComponent {
                             latestDate={this.state.latestDate}
                             handleNext={this.nextDay}
                             handlePrevious={this.previousDay}
+                            handleDateChange={this.handleDateChange}
                             errorMessage={this.state.errorMessage}
                         />
                     </div>
                 </section>
             </div>
         )
+    }
+
+    handleDateChange = (event) => {
+        this.setState({loading: true});
+        let date = new Date(event.target.value);
+        this.updateDay(date);
+    }
+
+    handleDateSubmit = (event) => {
+        this.setState({loading: true});
+        let date = new Date(this.state.date);
+        this.updateDay(date);
     }
 
     nextDay = () => {
@@ -112,7 +120,7 @@ class ExchangeRatesV2 extends AbstractPageComponent {
         this.updateDay(date);
     }
 
-    updateDay(date) {
+    updateDay = (date) => {
         this.setState({date: date});
         this.props.history.push('/exchange-rates/' + date.toISOString().slice(0, 10));
         this.getExchangeRates(date);

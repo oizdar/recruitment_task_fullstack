@@ -48,9 +48,27 @@ body {
     vertical-align: middle;
     align-items: center;
     color: #565656;
+    opacity: 0; /* Ukryte na starcie */
+    max-height: 0; /* Brak miejsca */
+    overflow: hidden; /* Ukrycie zawartości */
+    transition: opacity 1s ease-in, max-height 0.5s ease-out;
+}
+
+.exchange-rates-position-sub.visible {
+    opacity: 1; /* Widoczne */
+    max-height: 200px; /* Maksymalna wysokość */
 }
 
 .exchange-rates-position-sub .date {
     font-size: 16px;
     text-align: right;
+}
+
+.exchange-rates-date-picker {
+    text-align: center;
+    font-weight: bold;
+}
+.exchange-rates-date-picker:focus {
+    box-shadow: none;
+    border: 1px solid #ced4da;
 }

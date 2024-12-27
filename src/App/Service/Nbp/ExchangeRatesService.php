@@ -85,7 +85,7 @@ class ExchangeRatesService
     public function validateDate(\DateTimeInterface $date): bool
     {
         $actualRateDate = new \DateTimeImmutable();
-        if ($actualRateDate < new \DateTimeImmutable('12:00')) {
+        if ($actualRateDate < new \DateTimeImmutable('10:00')) {
             $actualRateDate = $actualRateDate->modify('-1 day');
         }
         $dateValidator = new DateRangeValidator(new \DateTimeImmutable('2023-01-01'), $actualRateDate);

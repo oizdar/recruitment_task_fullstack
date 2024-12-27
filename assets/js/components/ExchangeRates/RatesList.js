@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import Position from "./Position";
 import Loader from "../Common/Loader";
 import ErrorMessage from "../Common/ErrorMessage";
+import DatePicker from "../Common/DatePicker";
 
 class RatesList extends Component {
 
@@ -14,18 +15,26 @@ class RatesList extends Component {
         }
     }
 
+    checkDatesAreEqual() {
+        return this.props.latestDate?.getTime() === this.props.date?.getTime();
+    }
+
     render() {
         return (
             <div className="card exchange-rates-list-card">
                 <div className="card-header align-items-center">
                     <div className="row">
-                        <button type="button" className="btn btn-info col-1 offset-2"
+                        <button type="button" className="btn btn-info col-1 offset-3"
                                 onClick={this.props.handlePrevious}>Previous
                         </button>
-                        <div className="col-6 text-center">
-                            <h3 className="mt-2  ">Kurs na dzień: {this.props.date?.toLocaleDateString()}</h3>
+                        <div className="offset-1 col-2 text-center">
+                            <DatePicker
+                                className={"exchange-rates-date-picker"}
+                                date={this.props.date}
+                                handleDateChange={this.props.handleDateChange}
+                            />
                         </div>
-                        <button type="button" className="btn btn-info col-1" onClick={this.props.handleNext}>Next
+                        <button type="button" className="btn btn-info col-1 offset-1" onClick={this.props.handleNext}>Next
                         </button>
 
                     </div>
@@ -62,11 +71,13 @@ class RatesList extends Component {
                                         {
                                             this.props.rates?.map((rate) => {
                                                 return (
-                                                    <div className="list-group-item list-group-item-action" key={rate.code} onClick={() => this.openDetails(rate.code)}>
+                                                    <div className={"list-group-item " + (!this.checkDatesAreEqual() ? 'list-group-item-action' : '')}
+                                                         key={rate.code}
+                                                         onClick={!this.checkDatesAreEqual() ? () => this.toggleDetails(rate.code) : null}>
                                                         <Position
                                                             rate={rate}
                                                             latestRate={this.props.latestRates.find((latestRate) => latestRate.code === rate.code)}
-                                                            isOpen={this.state.isOpen[rate.code]}
+                                                            isOpen={!this.checkDatesAreEqual() && this.state.isOpen[rate.code]}
                                                             latestDate={this.props.latestDate}
                                                         />
                                                     </div>
@@ -79,15 +90,35 @@ class RatesList extends Component {
                     }
 
                 </div>
-                <div className="card-footer text-muted text-center">
-                    Kurs porównywany do najnowszego kursu z dnia: {this.props.latestDate?.toLocaleDateString()}
-                </div>
+                {!this.checkDatesAreEqual()
+                    ? (
+                        <div className="card-footer text-muted text-center">
+                            Kurs porównywany do najnowszego kursu z dnia: {this.props.latestDate?.toLocaleDateString()}
+                        </div>
+                    ) : null
+                }
+
             </div>
         )
     }
 
-    openDetails(key) {
-        this.setState((state, props) => ({isOpen: { ...state.isOpen, [key]: !state.isOpen[key]}}));
+    toggleDetails(key) {
+        this.setState((state, props) => ({
+            isOpen: {
+                ...state.isOpen,
+                [key]: !state.isOpen[key]
+            }
+        }));
+    }
+
+    hideAllDetails() {
+        this.setState((state, props) => ({
+            isOpen: []
+        }));
+    }
+
+    showInput = () => {
+        this.setState({showDateInput: true});
     }
 
 }
