@@ -4,6 +4,7 @@ import React from 'react';
 import RatesList from "./ExchangeRates/RatesList";
 import AbstractPageComponent from "./AbstractPageComponent";
 import axios from "axios";
+import RatesCalculator from "./ExchangeRates/RatesCalculator";
 
 class ExchangeRatesV2 extends AbstractPageComponent {
 
@@ -88,6 +89,13 @@ class ExchangeRatesV2 extends AbstractPageComponent {
                             handleDateChange={this.handleDateChange}
                             errorMessage={this.state.errorMessage}
                         />
+                        {
+                            !this.state.loading && this.state.responseIsOK
+                                ? <RatesCalculator
+                                    rates={this.state.responseData.rates}
+                                />
+                                : null
+                        }
                     </div>
                 </section>
             </div>
@@ -97,12 +105,6 @@ class ExchangeRatesV2 extends AbstractPageComponent {
     handleDateChange = (event) => {
         this.setState({loading: true});
         let date = new Date(event.target.value);
-        this.updateDay(date);
-    }
-
-    handleDateSubmit = (event) => {
-        this.setState({loading: true});
-        let date = new Date(this.state.date);
         this.updateDay(date);
     }
 

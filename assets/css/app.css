@@ -67,8 +67,13 @@ body {
 .exchange-rates-date-picker {
     text-align: center;
     font-weight: bold;
+    color: #222222 !important;
 }
 .exchange-rates-date-picker:focus {
     box-shadow: none;
     border: 1px solid #ced4da;
+}
+
+.exchange-rates-calculator-card {
+    margin-top: 50px;
 }

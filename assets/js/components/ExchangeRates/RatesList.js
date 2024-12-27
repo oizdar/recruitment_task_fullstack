@@ -103,7 +103,7 @@ class RatesList extends Component {
     }
 
     toggleDetails(key) {
-        this.setState((state, props) => ({
+        this.setState((state) => ({
             isOpen: {
                 ...state.isOpen,
                 [key]: !state.isOpen[key]
@@ -112,9 +112,9 @@ class RatesList extends Component {
     }
 
     hideAllDetails() {
-        this.setState((state, props) => ({
+        this.setState({
             isOpen: []
-        }));
+        });
     }
 
     showInput = () => {
