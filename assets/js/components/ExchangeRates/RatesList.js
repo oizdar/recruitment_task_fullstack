@@ -22,6 +22,8 @@ class RatesList extends Component {
                     <div className="row">
                         <button type="button" className="btn btn-info col-1 offset-3"
                                 onClick={this.props.handlePrevious}>Previous
+                            <i className="fab fa-mdb"></i>
+
                         </button>
                         <div className="offset-1 col-2 text-center">
                             <DatePicker

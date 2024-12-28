@@ -4,6 +4,11 @@ body {
     background-color: lightgray;
 }
 
+.btn-info {
+    background-color: #edf1fc;
+    color: #17a2b8;
+}
+
 .exchange-rates-container {
     align-items: center;
     justify-content: center;
@@ -65,12 +70,29 @@ body {
 }
 
 .exchange-rates-date-picker {
+    font-size: 17px;
+    appearance: none;
+    -webkit-appearance: none; /* Dla WebKit */
+    -moz-appearance: none;
     text-align: center;
     font-weight: bold;
-    color: #222222 !important;
+    color: #17a2b8 !important;
+    background-color: #edf1fc;
 }
+
+.exchange-rates-date-picker::-webkit-datetime-edit-year-field,
+.exchange-rates-date-picker::-webkit-datetime-edit-month-field,
+.exchange-rates-date-picker::-webkit-datetime-edit-day-field {
+    color: #17a2b8;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #17a2b8;
+}
+
 .exchange-rates-date-picker:focus {
     box-shadow: none;
+    background-color: #edf1fc;
     border: 1px solid #ced4da;
 }
 

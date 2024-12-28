@@ -24,8 +24,10 @@ class RatesCalculator extends Component {
                 <div className="card-body">
                     <div className={"offset-3 col-6"}>
                         <div className="input-group mt-3 row">
-                            <select className="custom-select" onChange={this.updateBuyCurrency}
-                                    defaultValue={this.state.buyCurrency}>
+                            <select className="custom-select"
+                                    onChange={this.updateBuyCurrency}
+                                    defaultValue={this.state.buyCurrency}
+                            >
                                 {
                                     this.rates ? this.rates.map((rate) => {
                                         if (rate.sellPrice) {
@@ -38,11 +40,12 @@ class RatesCalculator extends Component {
                                 <label className="input-group-text"  htmlFor="buyCurrencySelect">Kupuję</label>
                             </div>
                             <input type="number" className="form-control" id="buyCurrencyValue" value={this.state.buyValue} onChange={this.updateBuyValue}/>
-
                         </div>
                         <div className="input-group mt-3 row">
-                            <select className="custom-select" id="sellCurrencySelect" onChange={this.updateSellCurrency}
-                                    defaultValue={this.state.sellCurrency}>
+                            <select className="custom-select"
+                                    onChange={this.updateSellCurrency}
+                                    defaultValue={this.state.sellCurrency}
+                            >
                                 {
                                     this.rates ? this.rates.map((rate) => {
                                         if (rate.buyPrice) {
