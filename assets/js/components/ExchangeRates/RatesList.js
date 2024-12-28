@@ -15,10 +15,6 @@ class RatesList extends Component {
         }
     }
 
-    checkDatesAreEqual() {
-        return this.props.latestDate?.getTime() === this.props.date?.getTime();
-    }
-
     render() {
         return (
             <div className="card exchange-rates-list-card">
@@ -90,7 +86,7 @@ class RatesList extends Component {
                     }
 
                 </div>
-                {!this.checkDatesAreEqual()
+                {!this.checkDatesAreEqual() && this.props.responsesAreOK
                     ? (
                         <div className="card-footer text-muted text-center">
                             Kurs porównywany do najnowszego kursu z dnia: {this.props.latestDate?.toLocaleDateString()}
@@ -100,6 +96,10 @@ class RatesList extends Component {
 
             </div>
         )
+    }
+
+    checkDatesAreEqual() {
+        return this.props.latestDate?.getTime() === this.props.date?.getTime();
     }
 
     toggleDetails(key) {
