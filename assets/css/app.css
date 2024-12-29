@@ -35,7 +35,7 @@ body {
 }
 
 .btn-info:active {
-    background-color: #a0c7e4;
+    background-color: #2c5777 !important;
     box-shadow: none;
     color: #2c5777;
 }
@@ -76,6 +76,12 @@ body {
 .bg-navbar {
     background-color: #2c5777;
 }
+
+.bg-badge {
+    background-color: #e1ecf4;
+    color: #39739d;
+}
+
 .border-bottom {
     border-bottom: 1px solid #7aa7c7;
 }
@@ -148,7 +154,9 @@ body {
 .exchange-rates-date-picker::-webkit-calendar-picker-indicator {
     color: #39739d;
 }
-
+.exchange-rates-date-picker::-webkit-calendar-picker-indicator {
+    color: #39739d !important;
+}
 .exchange-rates-date-picker::-webkit-clear-button {
     display: none;
 }

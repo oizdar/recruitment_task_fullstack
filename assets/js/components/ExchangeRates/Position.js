@@ -34,16 +34,16 @@ class Position extends Component {
                     <div className="row">
                         <div className="col-4">
                             {this.rate.buyPrice ? this.formatCurrency(this.rate.buyPrice) : '-'}
-                            <span className={"badge badge-pill badge-info text-middle"}>{this.getBuyPriceDiff()}</span>
+                            <span className={"badge badge-pill bg-badge"}>{this.getBuyPriceDiff()}</span>
                         </div>
                         <div className="col-4">
                             {this.rate.nbpRate ? this.formatCurrency(this.rate.nbpRate) : '-'}
-                            <span className={" badge badge-pill badge-info text-middle"}>{this.getNbpRateDiff()}</span>
+                            <span className={" badge badge-pill bg-badge"}>{this.getNbpRateDiff()}</span>
                         </div>
                         <div className="col-4">
                             {this.rate.sellPrice ? this.formatCurrency(this.rate.sellPrice) : '-'}
                             <span
-                                className={" badge badge-pill badge-info text-middle"}>{this.getSellPriceDiff()}</span>
+                                className={" badge badge-pill bg-badge"}>{this.getSellPriceDiff()}</span>
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ class Position extends Component {
             return null;
         }
 
-        return this.formatCurrency(this.rate.buyPrice - this.latestRate.buyPrice, 3);
+        return this.formatCurrency(this.rate.buyPrice - this.latestRate.buyPrice);
     }
 
     getSellPriceDiff() {
@@ -82,7 +82,7 @@ class Position extends Component {
             return null;
         }
 
-        return this.formatCurrency(this.rate.sellPrice - this.latestRate.sellPrice, 3)
+        return this.formatCurrency(this.rate.sellPrice - this.latestRate.sellPrice)
     }
 
     getNbpRateDiff() {
