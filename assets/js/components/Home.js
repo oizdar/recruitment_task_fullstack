@@ -22,7 +22,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                <nav className="navbar navbar-expand-lg navbar-dark bg-navbar">
                     <Link className={"navbar-brand"} to={"#"}> Telemedi Zadanko </Link>
                     <div id="navbarText">
                         <ul className="navbar-nav mr-auto">

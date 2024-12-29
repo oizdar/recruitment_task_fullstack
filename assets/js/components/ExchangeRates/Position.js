@@ -24,12 +24,12 @@ class Position extends Component {
     render() {
         return (<>
             <div className="row exchange-rates-position">
-                <h4 className="col-3">
+                <h5 className="col-3">
                     {this.rate.currency}
-                </h4>
-                <h5 className="col-1">
-                    {this.rate.code}
                 </h5>
+                <h6 className="col-1">
+                    {this.rate.code}
+                </h6>
                 <div className="col-7 offset-1">
                     <div className="row">
                         <div className="col-4">

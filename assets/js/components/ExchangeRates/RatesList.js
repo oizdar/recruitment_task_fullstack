@@ -37,12 +37,12 @@ class RatesList extends Component {
 
                     </div>
                 </div>
-                <div className="card-body">
+                <div className={"card-body " + (this.props.responsesAreOK && !this.props.loading ? "p-0" : null)}>
                     {
                         this.props.loading
                             ? (<Loader/>)
                             : (this.props.responsesAreOK
-                                ? (<div className="list-group">
+                                ? (<div className="list-group list-group-flush">
                                         <div className="list-group-item" key="header">
                                             <div className="row exchange-rates-header">
                                                 <div className="col-3">
@@ -88,9 +88,9 @@ class RatesList extends Component {
                     }
 
                 </div>
-                {!this.checkDatesAreEqual() && this.props.responsesAreOK
+                {!this.checkDatesAreEqual() && this.props.responsesAreOK && !this.props.loading
                     ? (
-                        <div className="card-footer text-muted text-center">
+                        <div className="card-footer text-center">
                             Kurs porównywany do najnowszego kursu z dnia: {this.props.latestDate?.toLocaleDateString()}
                         </div>
                     ) : null
