@@ -20,19 +20,18 @@ class RatesList extends Component {
             <div className="card exchange-rates-list-card">
                 <div className="card-header align-items-center">
                     <div className="row">
-                        <button type="button" className="btn btn-info col-1 offset-3"
+                        <button type="button" className="btn btn-info col-1 offset-4"
                                 onClick={this.props.handlePrevious}>Previous
                             <i className="fab fa-mdb"></i>
-
                         </button>
-                        <div className="offset-1 col-2 text-center">
+                        <div className="col-2">
                             <DatePicker
                                 className={"exchange-rates-date-picker"}
                                 date={this.props.date}
                                 handleDateChange={this.props.handleDateChange}
                             />
                         </div>
-                        <button type="button" className="btn btn-info col-1 offset-1" onClick={this.props.handleNext}>Next
+                        <button type="button" className="btn btn-info col-1" onClick={this.props.handleNext}>Next
                         </button>
 
                     </div>
