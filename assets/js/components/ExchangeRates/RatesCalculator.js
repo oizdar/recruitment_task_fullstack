@@ -6,13 +6,23 @@ class RatesCalculator extends Component {
 
     constructor(props) {
         super(props);
-        this.rates = [...this.props.rates, {code: "PLN", currency: "Polski złoty", sellPrice: 1, buyPrice: 1}];
+        this.PLN = {code: "PLN", currency: "Polski złoty", sellPrice: 1, buyPrice: 1}
         this.state = {
+            rates: [...props.rates, this.PLN],
             buyValue: 0,
             sellValue: 0,
-            buyCurrency: this.props.rates[0]?.code,
-            sellCurrency: this.props.rates[1]?.code,
+            buyCurrency: props.rates[0].code,
+            buyRates: [],
+            sellCurrency: props.rates[1].code,
+            sellRates: [],
         }
+    }
+
+    componentDidMount() {
+        this.setState((state, props) => ({
+            buyRates: state.rates.filter((rate) => rate.code !== props.rates[1].code),
+            sellRates: state.rates.filter((rate) => rate.code !== props.rates[0].code)
+        }));
     }
 
     render() {
@@ -29,7 +39,7 @@ class RatesCalculator extends Component {
                                     defaultValue={this.state.buyCurrency}
                             >
                                 {
-                                    this.rates ? this.rates.map((rate) => {
+                                    this.state.buyRates ? this.state.buyRates.map((rate) => {
                                         if (rate.sellPrice) {
                                             return <option key={rate.code} value={rate.code}>{rate.currency} </option>
                                         }
@@ -47,7 +57,7 @@ class RatesCalculator extends Component {
                                     defaultValue={this.state.sellCurrency}
                             >
                                 {
-                                    this.rates ? this.rates.map((rate) => {
+                                    this.state.sellRates ? this.state.sellRates.map((rate) => {
                                         if (rate.buyPrice) {
                                             return <option key={rate.code} value={rate.code}>{rate.currency}</option>
                                         }
@@ -73,11 +83,17 @@ class RatesCalculator extends Component {
     }
 
     updateBuyCurrency = (event) => {
-        this.setState({buyCurrency: event.target.value}, this.calculateSellValue)
+        this.setState({
+            buyCurrency: event.target.value,
+            sellRates: [...this.props.rates, this.PLN].filter((rate) => rate.code !== event.target.value)
+        }, this.calculateSellValue)
     }
 
     updateSellCurrency = (event) => {
-        this.setState({sellCurrency: event.target.value}, this.calculateSellValue)
+        this.setState({
+            sellCurrency: event.target.value,
+            buyRates: [...this.props.rates, this.PLN].filter((rate) => rate.code !== event.target.value)
+        }, this.calculateSellValue)
     }
 
     updateBuyValue = (event) => {
@@ -91,9 +107,9 @@ class RatesCalculator extends Component {
     calculateSellValue = () => {
         const {buyValue, buyCurrency, sellCurrency} = this.state;
 
-        if ( buyCurrency && sellCurrency && this.rates) {
-            const buyRate = this.rates.find((rate) => rate.code === buyCurrency)?.sellPrice || 1;
-            const sellRate = this.rates.find((rate) => rate.code === sellCurrency)?.buyPrice || 1;
+        if ( buyCurrency && sellCurrency && this.state.sellRates) {
+            const buyRate = this.state.buyRates.find((rate) => rate.code === buyCurrency)?.sellPrice || 1;
+            const sellRate = this.state.sellRates.find((rate) => rate.code === sellCurrency)?.buyPrice || 1;
 
             const sellValue = (buyValue * buyRate) / sellRate;
             this.setState({sellValue: sellValue.toFixed(2)});
@@ -103,9 +119,9 @@ class RatesCalculator extends Component {
     calculateBuyValue = () => {
         const {sellValue, buyCurrency, sellCurrency} = this.state;
 
-        if (buyCurrency && sellCurrency && this.rates) {
-            const buyRate = this.rates.find((rate) => rate.code === buyCurrency)?.sellPrice || 1;
-            const sellRate = this.rates.find((rate) => rate.code === sellCurrency)?.buyPrice || 1;
+        if (buyCurrency && sellCurrency && this.state.buyRates) {
+            const buyRate = this.state.buyRates.find((rate) => rate.code === buyCurrency)?.sellPrice || 1;
+            const sellRate = this.state.sellRates.find((rate) => rate.code === sellCurrency)?.buyPrice || 1;
 
             const buyValue = (sellValue * sellRate) / buyRate;
             this.setState({buyValue: buyValue.toFixed(2)});
