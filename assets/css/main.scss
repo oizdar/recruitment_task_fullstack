@@ -1,0 +1,213 @@
+$primary: #2c5777;
+$secondary: #39739d;
+$background-emphasis: #edf1fc;
+$success: #4e73e5;
+$warning: #f6c23e;
+$light: #e1ecf4;
+$focus-background: #b3d3ea;
+$border: 1px solid #7aa7c7;
+
+
+body {
+    background-color: $light;
+}
+
+/* Bootstrap overwrite*/
+.btn-info {
+    background-color: $light;
+    border: $border;
+    border-radius: 3px;
+    color: $secondary;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.15385;
+    outline: none;
+    padding: 8px .8em;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+}
+
+.btn-info:hover,
+.btn-info:focus {
+    background-color: $focus-background;
+    color: $primary;
+}
+
+.btn-info:focus {
+    box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.btn-info:active {
+    background-color: $primary !important;
+    box-shadow: none;
+}
+
+.card {
+    border: $border;
+
+    &-header {
+        background-color: $background-emphasis;
+        border-bottom: $border;
+        color: $primary;
+    }
+
+    &-footer {
+        background-color: $background-emphasis;
+        border-top: $border;
+        color: $primary;
+    }
+}
+
+.form-control,
+.custom-select {
+    border: $border;
+}
+
+.input-group-text {
+    background-color: $background-emphasis;
+    border-top: $border;
+    border-bottom: $border;
+}
+
+/* Custom styles */
+
+.bg-navbar {
+    background-color: $primary;
+}
+
+.bg-badge {
+    background-color: $light;
+    color: $secondary;
+}
+
+.border-bottom {
+    border-bottom: $border;
+}
+
+.date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: $background-emphasis;
+    border-radius: 50%;
+    border: $border;
+    height: 4rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $focus-background;
+    }
+
+    &-month {
+        color: $success;
+        line-height: 1;
+        text-transform: uppercase;
+        font-size: 1rem;
+    }
+
+    &-day {
+        @extend .date-picker-month;
+        font-weight: 500;
+        font-size: 1.5rem;
+    }
+}
+
+.exchange-rates {
+    text-align: center;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+
+    .list-group-item-action {
+        cursor: pointer;
+        transition: max-height 0.2s ease-out;
+    }
+
+    &-container {
+        @extend .exchange-rates;
+        margin-top: 50px;
+    }
+
+    &-header {
+        @extend .exchange-rates;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    &-position {
+        @extend .exchange-rates;
+
+         h5, h6 {
+            margin-top: 20px;
+        }
+
+        &-sub {
+            text-align: center;
+            vertical-align: middle;
+            align-items: center;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 1s ease-in, max-height 0.5s ease-out;
+
+            &.visible {
+                opacity: 1;
+                max-height: 200px;
+            }
+
+            .date {
+                font-size: 16px;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.exchange-rates-date-picker {
+    font-size: 17px;
+    appearance: none;
+    -webkit-appearance: none; /* Dla WebKit */
+    -moz-appearance: none;
+    text-align: center;
+    color: $secondary;
+    background-color: $background-emphasis;
+
+    &:focus {
+        box-shadow: none;
+        background-color: $background-emphasis;
+        border: 1px solid #ced4da;
+    }
+
+    &::-webkit-datetime-edit-year-field,
+    &::-webkit-datetime-edit-month-field,
+    &::-webkit-datetime-edit-day-field,
+    &::-webkit-calendar-picker-indicator, {
+        color: $secondary;
+    }
+
+    &::-webkit-calendar-picker-indicator {
+        color: $secondary !important;
+    }
+
+    &::-webkit-clear-button {
+        display: none;
+    }
+}
+
+.exchange-rates-calculator-card {
+    margin-top: 50px;
+
+    .card-header h3 {
+        margin-top: 5px;
+    }
+
+    .input-group-prepend > label {
+        width: 100px;
+    }
+}
