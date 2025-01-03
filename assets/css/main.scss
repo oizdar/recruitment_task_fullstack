@@ -143,7 +143,7 @@ body {
     &-position {
         @extend .exchange-rates;
 
-         h5, h6 {
+        h5, h6 {
             margin-top: 20px;
         }
 
@@ -167,9 +167,21 @@ body {
             }
         }
     }
+
+    &-calculator-card {
+        margin-top: 50px;
+
+        .card-header h3 {
+            margin-top: 5px;
+        }
+
+        .input-group-prepend > label {
+            width: 100px;
+        }
+    }
 }
 
-.exchange-rates-date-picker {
+.date-picker {
     font-size: 17px;
     appearance: none;
     -webkit-appearance: none; /* Dla WebKit */
@@ -177,37 +189,12 @@ body {
     text-align: center;
     color: $secondary;
     background-color: $background-emphasis;
-
     &:focus {
         box-shadow: none;
         background-color: $background-emphasis;
         border: 1px solid #ced4da;
     }
-
-    &::-webkit-datetime-edit-year-field,
-    &::-webkit-datetime-edit-month-field,
-    &::-webkit-datetime-edit-day-field,
-    &::-webkit-calendar-picker-indicator, {
-        color: $secondary;
-    }
-
-    &::-webkit-calendar-picker-indicator {
-        color: $secondary !important;
-    }
-
-    &::-webkit-clear-button {
-        display: none;
-    }
 }
 
-.exchange-rates-calculator-card {
-    margin-top: 50px;
 
-    .card-header h3 {
-        margin-top: 5px;
-    }
 
-    .input-group-prepend > label {
-        width: 100px;
-    }
-}

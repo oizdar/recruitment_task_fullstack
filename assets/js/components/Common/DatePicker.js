@@ -23,7 +23,7 @@ class DatePicker extends Component {
                 hidden
                 ref={this.inputRef}
                 type="date"
-                className={"form-control " + this.props.className}
+                className={this.props.className}
                 min={startDate.toISOString().slice(0, 10)}
                 max={today.toISOString().slice(0, 10)}
                        value={this.props.date ? this.props.date?.toISOString().slice(0, 10) : ""} //prevents console error when props undefined on first render
