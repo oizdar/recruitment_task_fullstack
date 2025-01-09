@@ -1,16 +1,14 @@
 // ./assets/js/components/Users.js
 
-import React, {Component} from 'react';
+import React from 'react';
 import axios from 'axios';
+import AbstractPageComponent from "./AbstractPageComponent.js";
 
-class SetupCheck extends Component {
+class SetupCheck extends AbstractPageComponent {
+
     constructor() {
         super();
         this.state = { setupCheck: {}, loading: true};
-    }
-
-    getBaseUrl() {
-        return 'http://telemedi-zadanie.localhost';
     }
 
     componentDidMount() {
@@ -18,8 +16,7 @@ class SetupCheck extends Component {
     }
 
     checkApiSetup() {
-        //const baseUrl = this.getBaseUrl();
-        const baseUrl = 'http://telemedi-zadanie.localhost';
+        const baseUrl = this.getBaseUrl();
         axios.get(baseUrl + `/api/setup-check?testParam=1`).then(response => {
             let responseIsOK = response.data && response.data.testParam === 1
             this.setState({ setupCheck: responseIsOK, loading: false})
